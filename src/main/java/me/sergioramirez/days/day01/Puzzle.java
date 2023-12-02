@@ -1,5 +1,7 @@
 package me.sergioramirez.days.day01;
 
+import me.sergioramirez.util.InputTextUtil;
+
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -11,16 +13,6 @@ import java.util.stream.Stream;
 
 public class Puzzle
 {
-
-    public static List<String> read_all_lines(String filepath) {
-        List<String> all_lines = new ArrayList<>();
-        try {
-            all_lines = Files.readAllLines(Paths.get(filepath), StandardCharsets.UTF_8);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return all_lines;
-    }
 
     public static int count_calibration_A(List<String> input) {
 
@@ -73,7 +65,7 @@ public class Puzzle
 
     public static void main( String[] args ) {
         String filepath = Paths.get("").toAbsolutePath()+"\\src\\main\\java\\me\\sergioramirez\\days\\day01\\input.txt";
-        List<String> input_lines = read_all_lines(filepath);
+        List<String> input_lines = InputTextUtil.read_all_lines(filepath);
         int result_A = count_calibration_A(input_lines);
         System.out.println(result_A);
 
