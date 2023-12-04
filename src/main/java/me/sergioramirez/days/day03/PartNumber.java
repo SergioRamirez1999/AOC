@@ -14,6 +14,11 @@ public class PartNumber {
     private int value;
     private List<Coordinate> coordinates;
     private boolean visited;
+
+    public boolean containCoordinate(Coordinate coordinate) {
+        return coordinates.stream().anyMatch(c -> c.getX()==coordinate.getX() && c.getY()==coordinate.getY());
+    }
+
 }
 
 @Data
@@ -21,4 +26,11 @@ public class PartNumber {
 class Coordinate {
     private int x;
     private int y;
+    private char character;
+
+    public Coordinate(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
 }
