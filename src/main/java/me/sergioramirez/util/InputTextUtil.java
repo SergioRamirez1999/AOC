@@ -17,4 +17,14 @@ public class InputTextUtil {
         }
         return all_lines;
     }
+
+    public static String read_all_string(String filepath) {
+        String text = "";
+        try {
+            text = Files.readString(Paths.get(filepath), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return text;
+    }
 }

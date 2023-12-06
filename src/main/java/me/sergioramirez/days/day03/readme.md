@@ -66,4 +66,4 @@ What is the sum of all of the gear ratios in your engine schematic?
 
 Your puzzle answer was __80179647__.
 
-Both parts of this puzzle are complete! They provide two gold stars: **
+__Both parts of this puzzle are complete! They provide two gold stars: **__

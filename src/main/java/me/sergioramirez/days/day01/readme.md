@@ -48,4 +48,4 @@ What is the sum of all of the calibration values?
 
 Your puzzle answer was __52840__.
 
-Both parts of this puzzle are complete! They provide two gold stars: **
+__Both parts of this puzzle are complete! They provide two gold stars: **__
