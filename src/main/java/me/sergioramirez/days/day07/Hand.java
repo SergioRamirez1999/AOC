@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Data
 @AllArgsConstructor
@@ -29,9 +30,9 @@ public class Hand implements Comparable<Hand> {
         this.label_value = label_value;
     }
 
-    public String determine_type_hand() {
+    public String determine_type_hand(String part) {
         String type;
-        Map<String, Integer> card_count = new HashMap<>();
+        LinkedHashMap<String, Integer> card_count = new LinkedHashMap<>();
         for(String card: cards.split("")) {
             if(card_count.containsKey(card)) card_count.put(card, card_count.get(card) + 1);
             else card_count.put(card, 1);
@@ -39,7 +40,22 @@ public class Hand implements Comparable<Hand> {
 
         List<Map.Entry<String, Integer>> sets = card_count.entrySet().stream().sorted(Map.Entry.comparingByValue((t1, t2) -> Integer.compare(t2, t1))).toList();
 
-        switch (card_count.size()) {
+        if(part.equals("two") && card_count.containsKey("J") && card_count.get("J")!=5) {
+            Integer cantJ = card_count.entrySet().stream().filter(e->e.getKey().equals("J")).mapToInt(Map.Entry::getValue).sum();
+            sets = sets.stream().sorted((s1,s2)-> s2.getValue().compareTo(s1.getValue())).collect(Collectors.toList());
+            sets.remove(card_count.entrySet().stream().filter(v -> v.getKey().equals("J")).findFirst().orElse(null));
+            if(sets.size()!=1 && Objects.equals(sets.get(0).getValue(), sets.get(1).getValue())){
+                if(label_value.get(sets.get(1).getKey())>label_value.get(sets.get(0).getKey())){
+                    Map.Entry<String,Integer> auxSet = sets.get(0);
+                    sets.remove(auxSet);
+                    sets.add(auxSet);
+                }
+            }
+            sets.get(0).setValue(sets.get(0).getValue()+cantJ);
+        }
+
+
+        switch (sets.size()) {
             case 5:
                 type = "High card";
                 break;
@@ -62,6 +78,7 @@ public class Hand implements Comparable<Hand> {
         }
         return type;
     }
+
 
     @Override
     public int compareTo(Hand o) {
