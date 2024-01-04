@@ -102,4 +102,4 @@ Find the initial beam configuration that energizes the largest number of tiles; 
 
 Your puzzle answer was __7673__.
 
-Both parts of this puzzle are complete! They provide two gold stars: **
+__Both parts of this puzzle are complete! They provide two gold stars: **__

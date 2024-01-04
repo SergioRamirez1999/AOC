@@ -126,4 +126,4 @@ In each pattern, fix the smudge and find the different line of reflection. What 
 
 Your puzzle answer was __25401__.
 
-Both parts of this puzzle are complete! They provide two gold stars: **
+__Both parts of this puzzle are complete! They provide two gold stars: **__

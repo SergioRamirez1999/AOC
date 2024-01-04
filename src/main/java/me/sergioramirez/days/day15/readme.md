@@ -170,4 +170,4 @@ With the help of an over-enthusiastic reindeer in a hard hat, follow the initial
 
 Your puzzle answer was __267372__.
 
-Both parts of this puzzle are complete! They provide two gold stars: **
+__Both parts of this puzzle are complete! They provide two gold stars: **__

@@ -86,5 +86,5 @@ Convert the hexadecimal color codes into the correct instructions; if the Elves 
 
 Your puzzle answer was __63806916814808__.
 
-Both parts of this puzzle are complete! They provide two gold stars: **
+__Both parts of this puzzle are complete! They provide two gold stars: **__
 
