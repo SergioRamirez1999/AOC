@@ -15,9 +15,7 @@ public class Tile {
 
     private String value;
     @ToString.Exclude
-    private String realValue;
-    @ToString.Exclude
-    private Tile p1, p2, p3, p4;
+    private Tile p1, p2;
     private boolean visited;
     private boolean up, down, left, right;
     private int x,y;

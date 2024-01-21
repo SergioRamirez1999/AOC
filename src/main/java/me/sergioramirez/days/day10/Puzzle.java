@@ -3,50 +3,17 @@ package me.sergioramirez.days.day10;
 import me.sergioramirez.util.InputTextUtil;
 
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 public class Puzzle {
 
     private static final String filepath = Paths.get("").toAbsolutePath()+"\\src\\main\\java\\me\\sergioramirez\\days\\day10\\input.txt";
     private static final List<String> input = InputTextUtil.read_all_lines(filepath);
+    private static final List<List<Tile>> grid = init_grid();
+    private static final List<Tile> path_loop = new ArrayList<>();
 
-    private static final List<List<Tile>> grid = new ArrayList<>();
-
-    private static void init_grid() {
-
-        for(int i = 0; i < input.size(); i++) {
-            List<Tile> line = new ArrayList<>();
-            for(int h = 0; h < input.get(i).length(); h++){
-                String x = String.valueOf(input.get(i).charAt(h));
-                Tile tile = new Tile();
-                if(x.equals("-")) {
-                    tile.setLeft(true);
-                    tile.setRight(true);
-                }else if(x.equals("|")) {
-                    tile.setUp(true);
-                    tile.setDown(true);
-                }else if(x.equals("L")) {
-                    tile.setUp(true);
-                    tile.setRight(true);
-                }else if(x.equals("J")) {
-                    tile.setUp(true);
-                    tile.setLeft(true);
-                }else if(x.equals("7")) {
-                    tile.setDown(true);
-                    tile.setLeft(true);
-                }else if(x.equals("F")) {
-                    tile.setDown(true);
-                    tile.setRight(true);
-                }
-                tile.setValue(x);
-                tile.setX(h);
-                tile.setY(i);
-                line.add(tile);
-            }
-            grid.add(line);
-        }
+    private static List<List<Tile>> init_grid() {
+        List<List<Tile>> grid = getTiles();
 
         for(int i=0; i<grid.size(); i++){
             for(int h=0; h < grid.get(i).size(); h++) {
@@ -55,11 +22,6 @@ public class Puzzle {
                 Tile down = (i+1) < grid.size() ? grid.get(i+1).get(h) : null;
                 Tile left = (h-1) >= 0 ? grid.get(i).get(h-1) : null;
                 Tile right = (h+1) < grid.get(i).size() ? grid.get(i).get(h+1) : null;
-
-                t.setP1(up);
-                t.setP2(up);
-                t.setP3(up);
-                t.setP4(up);
 
                 String value = t.getValue();
                 if(value.equals("S")) {
@@ -75,65 +37,138 @@ public class Puzzle {
                         value = "7";
                     else if(down != null && down.isUp() && right != null && right.isLeft())
                         value = "F";
-                    t.setRealValue(value);
                 }
 
                 if(t.isPipe()) {
-                    if(value.equals("-")) {
+                    switch (value) {
+                        case "-" -> {
                             t.setP1(left);
                             t.setP2(right);
-                    }else if(value.equals("|")) {
+                        }
+                        case "|" -> {
                             t.setP1(up);
                             t.setP2(down);
-                    }else if(value.equals("L")) {
+                        }
+                        case "L" -> {
                             t.setP1(up);
                             t.setP2(right);
-                    }else if(value.equals("J")) {
+                        }
+                        case "J" -> {
                             t.setP1(up);
                             t.setP2(left);
-                    }else if(value.equals("7")) {
+                        }
+                        case "7" -> {
                             t.setP1(left);
                             t.setP2(down);
-                    }else if(value.equals("F")) {
+                        }
+                        case "F" -> {
                             t.setP1(right);
                             t.setP2(down);
+                        }
                     }
                 }
 
             }
         }
+
+        return grid;
     }
 
-    private static int recorrer() {
+    private static List<List<Tile>> getTiles() {
+        List<List<Tile>> grid = new ArrayList<>();
+
+        for(int i = 0; i < input.size(); i++) {
+            List<Tile> line = new ArrayList<>();
+            for(int h = 0; h < input.get(i).length(); h++){
+                String x = String.valueOf(input.get(i).charAt(h));
+                Tile tile = new Tile();
+                switch (x) {
+                    case "-" -> {
+                        tile.setLeft(true);
+                        tile.setRight(true);
+                    }
+                    case "|" -> {
+                        tile.setUp(true);
+                        tile.setDown(true);
+                    }
+                    case "L" -> {
+                        tile.setUp(true);
+                        tile.setRight(true);
+                    }
+                    case "J" -> {
+                        tile.setUp(true);
+                        tile.setLeft(true);
+                    }
+                    case "7" -> {
+                        tile.setDown(true);
+                        tile.setLeft(true);
+                    }
+                    case "F" -> {
+                        tile.setDown(true);
+                        tile.setRight(true);
+                    }
+                }
+                tile.setValue(x);
+                tile.setX(h);
+                tile.setY(i);
+                line.add(tile);
+            }
+            grid.add(line);
+        }
+        return grid;
+    }
+
+
+    private static int walk_loop() {
         Tile tileS = grid.stream().flatMap(Collection::stream).filter(t -> t.getValue().equals("S")).findFirst().get();
-        boolean flag = false;
         int count = 0;
-        Tile tilep1 = tileS.getP1();
-        Tile tilep2 = tileS.getP2();
+        Tile tile = tileS;
         tileS.setVisited(true);
-        while(!flag) {
-            tilep1.setVisited(true);
-            tilep2.setVisited(true);
-            Tile p1 = tilep1.getNotVisited();
-            Tile p2 = tilep2.getNotVisited();
-            if(p1 != null){
-                p1.setVisited(true);
-                tilep1 = p1;
-            } else flag = true;
-            if(p2 != null){
-                p2.setVisited(true);
-                tilep2 = p2;
-            } else flag = true;
+        while (tile != null) {
+            tile.setVisited(true);
+            path_loop.add(tile);
+            tile = tile.getNotVisited();
             count++;
         }
-        return count;
+        return count/2;
+    }
+
+    private static int area_loop() {
+        int area = area_gauss();
+        int bdiv = (path_loop.size() / 2);
+        return area - bdiv + 1;
+    }
+
+    private static int area_gauss() {
+        //I = cantidad de puntos interiores
+        //B = puntos limite
+        //Teorema Pick's --> A = I + B/2 - 1
+        //Despejamos I ---> I = A - b/2 + 1
+
+        List<Tile> tileLeft = new ArrayList<>(path_loop.subList(0, path_loop.size()-1));
+        List<Tile> tileRight = new ArrayList<>(path_loop.subList(1, path_loop.size()));
+        tileLeft.add(tileRight.getLast()); //Agrego los puntos límites para realizar tmbn la diferencia de productos de coordenadas
+        tileRight.add(tileLeft.getFirst());
+        int area = 0;
+        for(int i = 0; i < tileLeft.size(); i++) {
+            Tile t1 = tileLeft.get(i);
+            Tile t2 = tileRight.get(i);
+            int x1 = t1.getX();
+            int y1 = t1.getY();
+            int x2 = t2.getX();
+            int y2 = t2.getY();
+            area += (x1*y2)-(x2*y1);
+        }
+
+        return Math.abs(area) / 2;
     }
 
 
     public static void main(String[] args) {
-        init_grid();
-        int result_A = recorrer();
+        int result_A = walk_loop();
         System.out.println(result_A);
+        int result_B = area_loop();
+        System.out.println(result_B);
 
     }
 }
