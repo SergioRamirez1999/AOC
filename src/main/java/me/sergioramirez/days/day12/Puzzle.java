@@ -62,7 +62,7 @@ public class Puzzle {
     public static void main(String[] args) {
         long result_A = different_arrangements(1);
         System.out.println(result_A);
-//        long result_B = different_arrangements(5);
-//        System.out.println(result_B);
+        long result_B = different_arrangements(5);
+        System.out.println(result_B);
     }
 }
